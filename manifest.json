@@ -1,0 +1,22 @@
+{
+    "name": "SPORT.com",
+    "short_name": "SPORTcom",
+    "description": "SPORTcom PWA Application",
+    "start_url": "/index.html",
+    "display": "standalone",
+    "background_color": "#3a5795",
+    "theme_color": "#3a5795",
+    "icons": [
+        {
+            "src": "icon-192x192.png",
+            "sizes": "192x192",
+            "type": "image.png"
+        },
+        {
+            "src": "icon-512x512.png",
+            "sizes": "512x512",
+            "type": "image.png"
+        }
+    ],
+    "gcm_sender_id": "507723064127"
+}

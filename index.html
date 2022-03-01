@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTH-8" />
+        <title>SPORT.com</title>
+        <meta name = "description" content="SPORT.com" />
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link type="text/css" rel="stylesheet" href="css/materialize.min.css"  media="screen,projection"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <link rel="manifest" href="/manifest.json">
+        <meta name="theme-color" content="#00897B" />
+    </head>
+
+    <body>
+        <!-- NAVIGATION-->
+        <nav class="blue darken-3" role="navigation">
+            <div class="nav-wrapper container">
+                <a href="#" class="brand-logo">SPORT.com</a>
+                <a href="#" class="sidenav-trigger" data-target="nav-mobile">&#9776;</a>
+                <ul class="topnav right hide-on-med-and-down"></ul>
+                <ul class="sidenav" id="nav-mobile"></ul>
+            </div>
+        </nav>
+            
+        <!-- CONTENT-->
+        <div class="container" id="body-content"></div>
+        
+        <script type="text/javascript" src="js/materialize.min.js"></script>
+        <script src="js/script.js"></script>
+        <script src="js/api.js"></script>
+        <script src="js/favorite.js"></script>
+        <script src="js/database.js"></script>
+        <script src="js/idb.js"></script>
+
+        <script type="text/javascript">
+        
+            document.addEventListener("DOMContentLoaded", function () {
+            var pages = window.location.hash.substr(1);
+            });
+    
+            // periksa service worker
+            if (!('serviceWorker' in navigator)) {
+                console.log("Service worker tidak didukung browser ini.");
+            } else {
+                registerServiceWorker();
+                requestPermission();
+            }
+    
+            // register service worker
+            function registerServiceWorker() {
+                return navigator.serviceWorker.register('/service-worker.js')
+                .then(function (registration) {
+                    console.log("Registrasi service worker berhasil.");
+                    return registration;
+                })
+                .catch(function (err) {
+                    console.error("Registrasi service worker gagal.", err);
+                });
+            }
+
+            function requestPermission() {
+                if ('Notification' in window) {
+                    Notification.requestPermission().then(function (result) {
+                        if (result === "denied") {
+                            console.log("Fitur notifikasi tidak diijinkan.");
+                            return;
+                        } else if (result === "default") {
+                            console.error("Pengguna menutup kotak dialog permintaan ijin.");
+                            return;
+                        }
+    
+                        if (('PushManager' in window)) {
+                            navigator.serviceWorker.getRegistration().then(function(reg) {
+                            reg.pushManager.subscribe({
+                                userVisibleOnly: true
+                                }).then(function(sub) {
+                                    console.log("Berhasil melakukan subscribe dengan endpoint: ", sub.endpoint);
+                                    console.log("Berhasil melakukan subscribe dengan p256dh key: ", btoa(String.fromCharCode.apply(null, new Uint8Array(sub.getKey('p256dh')))));
+                                    console.log("Berhasil melakukan subscribe dengan auth key: ", btoa(String.fromCharCode.apply(null, new Uint8Array(sub.getKey('auth')))));
+                                }).catch(function(e) {
+                                    console.error("Tidak dapat melakukan subscribe. ", e);
+                                });
+                            });
+                        }
+                    });
+                }
+            }
+        </script>
+    
+        <!-- FOOTER-->
+        <footer class="blue darken-3 white-text center">
+            &copy; 2019 ArdoCoder
+        </footer>
+    </body>
+</html>
